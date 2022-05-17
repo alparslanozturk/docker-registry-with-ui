@@ -1,0 +1,43 @@
+version: 0.1
+log:
+  accesslog:
+    disabled: false
+  level: debug
+  formatter: text
+  fields:
+    service: registry
+
+storage:
+  cache:
+    blobdescriptor: inmemory
+  filesystem:
+    rootdirectory: /var/lib/registry
+  delete:
+    enabled: true
+
+http:
+  addr: 0.0.0.0.443
+  headers:
+    X-Content-Type-Options: [nosniff]
+    Access-Control-Allow-Credentials: [true]
+    Access-Control-Allow-Headers: ['Authorization', 'Accept']
+    Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS', 'DELETE']
+    Access-Control-Allow-Origin: ['http://registry']
+    Access-Control-Expose-Headers: ['Docker-Content-Digest']
+    Access-Control-Max-Age: [1728000]
+
+health:
+  storagedriver:
+    enabled: true
+    interval: 10s
+    threshold: 3
+
+auth:
+  htpasswd:
+    realm: basic-realm
+    path: /auth/htpasswd
+
+#proxy:
+#  remoteurl: https://index.docker.io/v1/
+#  username: username
+#  password: password
