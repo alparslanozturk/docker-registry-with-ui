@@ -18,8 +18,19 @@ Bu dosya sistem bazlı ayarlar vardır. Aşağıdaki girdiler örnektir. Eğer 4
 burada mirrors konusunu inceleyebilirsiniz. 
 
 ```
-"registry-mirrors": ["http://registry:5000"],
-"insecure-registries": ["registry:5000"],
+"registry-mirrors": ["https://registry"],
+```
+# login 
+```
+$ docker login registry
+Username: dockeruser
+Password:
+WARNING! Your password will be stored unencrypted in /home/kullan/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+
 ```
 
 Eğer kurulum 443 portundan ile sadece mirrors özelligini ekleseniz yeterli olur.  örn:  ``https://registry.ornek.com``
@@ -37,9 +48,13 @@ cat ~.docker/config.json
 
 # SSL üretim
 nodes -> private key des ile şifrelememesi içindir. 
+
 days 10 yıldır. 
+
 subj kolaylik olsun ekledim. 
+
 OS sürümüne göre bunu  curl ile kullanabilmek icin CA ve trusted e eklemek gerekir. :-)
+
 
 ```
 openssl genrsa -out certs/registry.key 4096
