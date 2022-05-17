@@ -30,7 +30,7 @@
 
 docker rm registry --force 
 
-docker run --rm -d --name registry -h registry -p 443:443 -p 5000:5000 \
+docker run --rm -d --name registry -h registry -p 443:443\
   -v $(pwd)/config.yml:/etc/docker/registry/config.yml \
   -v $(pwd)/data:/var/lib/registry \
   -v $(pwd)/auth:/auth \
