@@ -1,21 +1,33 @@
-# config.yml
-Bu dosya yada env ile degişiklik yapılabilir.
+iki adet docker vardır. bunlar run.sh ve run-ui.sh ile çalıştırılabilir. Docker registry 443 portunu ui ile 80 portunu kullancak şekilde ayarlarladım. 
 
+
+
+# config.yml
+Bu dosya yada docker run edilirken env(-e) ile degişiklik yapılabilir.
+
+
+
+# htpasswd
+Bu dosya ile auth işlemi için kullanılır. -B parametresi gereklidir. -b komut satırından çalışması için, -c dosya create etmesi içindir. 
 ``` htpasswd -b -B -c auth/htpasswd  dockeruser dockerpass```
 
 
 
 # /etc/docker/daemon.json
-
-sistem bazlı bir ayardı. 
+Bu dosya sistem bazlı ayarlar vardır. Aşağıdaki girdiler örnektir. Eğer 443 degilde 5000 portundan registry çalıştırılacaksa eklenemesi gerekir.
+burada mirrors konusunu inceleyebilirsiniz. 
 
 ```
 "registry-mirrors": ["http://registry:5000"],
 "insecure-registries": ["registry:5000"],
 ```
 
-kullanici bazli 
+Eğer kurulum 443 portundan ile sadece mirrors özelligini ekleseniz yeterli olur.  örn:  ``https://registry.ornek.com``
+```
+"registry-mirrors": ["https://registry"],
+```
 
+kullanici bazli ayalar sanırım bu dosyalarda.
 ```
 ls -alh ~.docker/config.json
 cat ~.docker/config.json
@@ -24,6 +36,10 @@ cat ~.docker/config.json
 
 
 # SSL üretim
+nodes -> private key des ile şifrelememesi içindir. 
+days 10 yıldır. 
+subj kolaylik olsun ekledim. 
+OS sürümüne göre bunu  curl ile kullanabilmek icin CA ve trusted e eklemek gerekir. :-)
 
 ```
 openssl genrsa -out certs/registry.key 4096
@@ -36,16 +52,15 @@ curl -> /etc/ssl/certs/ca-certificates.crt doyasini kullanir...
 
 sudo cp certs/registry.crt  /usr/share/ca-certificates/
 sudo update-ca-certificates
+```
 
 
 # hosts file 
 ``` 
 add /etc/hosts    "127.0.0.1 registry"
-
 ```
 
 # test
-
 ```
 curl -vvv -u "dockeruser:dockerpass" -isk https://registry/v2/_catalog
 ```
